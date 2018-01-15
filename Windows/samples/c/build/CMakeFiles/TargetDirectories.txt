@@ -1,0 +1,3 @@
+F:/TOF_NEW/sdk/TCM-E1_QVGA_SDK_RC1.02/dmcam/windows/samples/c/build/CMakeFiles/edit_cache.dir
+F:/TOF_NEW/sdk/TCM-E1_QVGA_SDK_RC1.02/dmcam/windows/samples/c/build/CMakeFiles/rebuild_cache.dir
+F:/TOF_NEW/sdk/TCM-E1_QVGA_SDK_RC1.02/dmcam/windows/samples/c/build/CMakeFiles/sample_capture_frames.dir

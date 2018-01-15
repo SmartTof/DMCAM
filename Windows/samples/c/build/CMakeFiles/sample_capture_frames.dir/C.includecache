@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../../../lib/include/dmcam.h
+stdbool.h
+-
+stdint.h
+-
+
+F:/TOF_NEW/sdk/TCM-E1_QVGA_SDK_RC1.02/dmcam/windows/samples/c/sample_capture_frames.c
+stdlib.h
+-
+stdio.h
+-
+string.h
+-
+stdint.h
+-
+stdarg.h
+-
+sys/types.h
+-
+getopt.h
+-
+stdbool.h
+-
+unistd.h
+-
+assert.h
+-
+pthread.h
+F:/TOF_NEW/sdk/TCM-E1_QVGA_SDK_RC1.02/dmcam/windows/samples/c/pthread.h
+dmcam.h
+F:/TOF_NEW/sdk/TCM-E1_QVGA_SDK_RC1.02/dmcam/windows/samples/c/dmcam.h
+windows.h
+-
+
