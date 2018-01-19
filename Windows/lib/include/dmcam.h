@@ -60,7 +60,7 @@ typedef struct {
     char product[32];
     char vendor[32];
     char serial[32];
-
+    char *expath;//extract path to store calibration data,can be set by dmcam_path_cfg
     void *lock; // device lock
 
     void *user_data0; // used internally for python extension
@@ -108,6 +108,7 @@ typedef enum
     DEV_MODE_NORMAL = 0, //3D mode
     DEV_MODE_DFU,
     DEV_MODE_TEST = 8,
+    DEV_MODE_DATA_UP,
 } dmcam_dev_mode_e;
 
 typedef enum  {
@@ -119,11 +120,6 @@ typedef enum  {
     DEV_REG_MCU = 8
 }dmcam_dev_reg_e;
 
-//typedef enum {
-//    FRAME_FMT_DCS1,
-//    FRAME_FMT_DCS4,
-//}dmcam_frame_format_e;
-
 typedef enum {
     PARAM_DEV_MODE = 0,
     PARAM_MOD_FREQ,
@@ -134,6 +130,7 @@ typedef enum {
     PARAM_INFO_SERIAL,
     PARAM_INFO_VERSION,  //HW&SW info
 
+    PARAM_INFO_CALIB, //get calibration info
     PARAM_ROI, //ROI set/get
     PARAM_FRAME_FORMAT, //frame information,eg.dcs1for gray,4 dcs for distance
     PARAM_ILLUM_POWER, //illumination power set/get
@@ -221,6 +218,15 @@ typedef union {
         int16_t bl_cal;
         int16_t br_cal;
     }temp;
+    struct {
+        uint8_t valid;      //data is valid;1==valid
+        uint8_t place;   //place type(RAM,FLASH and so on)
+        uint8_t flag;    //0:no compression used;1:zip compression used
+        uint32_t info;   //data info, version
+        uint32_t fsize;   //head+data+paddingsize
+        uint32_t datasize; //data size
+        uint16_t cksum;
+    }cinfo; //calibration info
 }dmcam_param_val_u;
 #pragma pack(pop)
 
@@ -307,6 +313,16 @@ __API void dmcam_uninit(void);
  */
 
 __API void dmcam_log_cfg(dmcam_log_level_e console_level, dmcam_log_level_e file_level, dmcam_log_level_e usb_level);
+
+
+/** 
+ * Setting where to save calibration data
+ * 
+ * @param path
+ * 
+ * @return __API void
+ */
+__API void dmcam_path_cfg(dmcam_dev_t *dev, char *path);
 
 /**
  * list the dmcam device and fill into dmcam_dev_t array.
@@ -640,7 +656,6 @@ typedef enum {
 }dmcam_filter_id_e;
 
 typedef union {
-    uint8_t raw[20];
     uint8_t case_idx; /**>User Scenario index */
     uint32_t lens_id; /**>length index*/
     uint32_t min_amp; /**>Min amplitude threshold*/
