@@ -355,8 +355,8 @@ void test_frame_size(dmcam_dev_t *dev)
 {
     dmcam_param_item_t wparam[1];
     dmcam_param_item_t rparam[1];
-    dmcam_roi_t sroi;
-    dmcam_roi_t groi;
+    dmcam_param_roi_t sroi;
+    dmcam_param_roi_t groi;
 
     sroi.srow = 0;
     sroi.erow = 79;

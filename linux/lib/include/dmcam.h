@@ -24,7 +24,7 @@
 extern "C"
 {
 #endif
-#ifdef LIBDMCAM_DLL_EXPORTS
+#ifdef LIBDMCAM_EXPORTS
 #define __API __declspec(dllexport)
 #else
 #define __API //__declspec(dllimport)
@@ -45,6 +45,16 @@ extern "C"
 #define DMCAM_ERR_CAP_UNKNOWN  (-10)
 
 #define DMCAM_FILTER_EN 1
+
+typedef struct {
+    uint32_t mod_clk; // modulation clock
+    uint16_t fps;     // frame per seconds
+    uint16_t priv_mode; // other mode
+    uint16_t min_amp;
+    uint16_t max_amp;
+    char *name;  // name string of the use case
+}dmcam_use_case_t;
+
 /**
  * dmcam device structure. It describes device usb port info, 
  * device info 
@@ -60,8 +70,10 @@ typedef struct {
     char product[32];
     char vendor[32];
     char serial[32];
-    char *expath;//extract path to store calibration data,can be set by dmcam_path_cfg
+    char *expath; //extract path to store calibration data,can be set by dmcam_path_cfg
     void *lock; // device lock
+    
+    dmcam_use_case_t use_case[2];
 
     void *user_data0; // used internally for python extension
     void *user_data1; // used internally for python extension
@@ -129,6 +141,7 @@ typedef enum {
     PARAM_INFO_CAPABILITY,
     PARAM_INFO_SERIAL,
     PARAM_INFO_VERSION,  //HW&SW info
+    PARAM_INFO_SENSOR, //part version, chip id, wafer id
 
     PARAM_INFO_CALIB, //get calibration info
     PARAM_ROI, //ROI set/get
@@ -227,6 +240,11 @@ typedef union {
         uint32_t datasize; //data size
         uint16_t cksum;
     }cinfo; //calibration info
+    struct {
+        uint16_t part_ver; //chip part version
+        uint16_t chip_id; //chip id
+        uint16_t wafer_id; //wafer id
+    }chip_info;
 }dmcam_param_val_u;
 #pragma pack(pop)
 
@@ -267,14 +285,7 @@ typedef struct {
     void *frame_data;  /** frame data pointer */
 }dmcam_frame_t;
 
-typedef struct {
-    uint32_t mod_clk; // modulation clock
-    uint16_t fps;     // frame per seconds
-    uint16_t priv_mode; // other mode
-    uint16_t min_amp;
-    uint16_t max_amp;
-    char *name;  // name string of the use case
-}dmcam_use_case_t;
+
 
 /** camera frame ready function prototype   */
 typedef void (*dmcam_cap_frdy_f)(dmcam_dev_t *dev, dmcam_frame_t *frame);
